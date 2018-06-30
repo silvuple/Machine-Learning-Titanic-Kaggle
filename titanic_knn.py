@@ -1,10 +1,9 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.model_selection import StratifiedKFold
+
 
 # Read titanic train and test csv files into pandas DataFrame.
 train = pd.read_csv('train.csv')
@@ -72,13 +71,13 @@ test.Last_name=le2.transform(Last_name_values_from_test)
 
 # 1.9. Create new column 'Relative_fare' from 'Fare' column.
 avg_fare = train.Fare.mean()
-train['Relative_fare'] = train.Fare.apply(lambda x: x/avg_fare)
-test['Relative_fare'] = test.Fare.apply(lambda x: x/avg_fare)
+train['Relative_fare'] = train.Fare.apply(lambda x: round(x/avg_fare, 2))
+test['Relative_fare'] = test.Fare.apply(lambda x: round(x/avg_fare, 2))
 
 # 1.10. Create new column 'Relative_age' from 'Age' column.
 avg_age = train.Age.mean()
-train['Relative_age'] = train.Age.apply(lambda x: x/avg_fare)
-test['Relative_age'] = test.Age.apply(lambda x: x/avg_fare)
+train['Relative_age'] = train.Age.apply(lambda x: round(x/avg_age, 2))
+test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_fare, 2))
 
 # 1.11. Convert 'Age' and 'Fare' columns to int types.
 train['Age'] = train.Age.astype('int64')
@@ -86,20 +85,13 @@ test['Age'] = test.Age.astype('int64')
 train['Fare'] = train.Fare.astype('int64')
 test['Fare'] = test.Fare.astype('int64')
 
-# 1.12. Round 'Relative_fare' and 'Relative_age' values to 2 digits 
-# after decimal point.
-train['Relative_fare'] = train.Relative_fare.apply(round, ndigits=2)
-test['Relative_fare'] = test.Relative_fare.apply(round, ndigits=2)
-train['Relative_age'] = train.Relative_age.apply(round, ndigits=2)
-test['Relative_age'] = test.Relative_age.apply(round, ndigits=2)
-
 
 # 2. Select features
 # 2.2. Creating training/testing set.
 all_features = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 
                 'Fare', 'Embarked', 'Last_name', 'Age_group', 
                 'Relative_fare', 'Relative_age']
-select_features = ['Sex', 'Relative_age', 'Relative_fare']
+select_features = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch']
 X = train[select_features]
 y = train['Survived']
 X_train, X_test, y_train, y_test = train_test_split(X, y)
@@ -107,48 +99,47 @@ X_predict = test[select_features]
 
 
 # 3. Run classification model - K-Nearest Neighbors Classifier.
-# 3.1. Create classifier instance
+# 3.1. Create classifier instance.
 knn = KNeighborsClassifier()
 
-# 3.2. Fit the model
+# 3.2. Fit the model.
 knn.fit(X_train, y_train)
 
-# 3.3. Get mean accuracy and cross_validation mean accuracy scores
-knn_score = knn.score(X_test, y_test)
-print("mean accuracy score is", knn_score)
+# 3.3. Get mean accuracy and cross_validation mean accuracy scores.
+accuracy_score = knn.score(X_test, y_test)
+mean_cv_score = cross_val_score(knn, X, y, cv=5).mean()
+print("mean accuracy score is", accuracy_score)
+print("cross_val accuracy score is", mean_cv_score)
 
-# 3.4. Search for best number of neighbors k:
+# 3.4. Get best number of neighbors (one with max accuracy score).
 k_range = list(range(1, 31))
 k_scores = []
 for k in k_range:
     knn = KNeighborsClassifier(n_neighbors=k)
-    scores = cross_val_score(knn, X, y, cv=10, scoring='accuracy')
+    scores = cross_val_score(knn, X, y, cv=5)
     k_scores.append(scores.mean())
 best_k = k_scores.index(max(k_scores))+1
-print("scores are", k_scores)
-print("best k is", best_k)
+print("best number of neighbors is", best_k)
 
-# Plot k against the cross validation accuracy score:
+# Plot number of neighbors against the cross validation accuracy score.
 plt.plot(k_range, k_scores)
 plt.xlabel('value of k in knn')
 plt.ylabel('cross_validated accuracy')
 plt.show()
 
-# Re-instantiate the classifier with the number of neighbors which 
-# yields max accuracy score
+# Re-instantiate the classifier with the number of neighbors.
 knn = KNeighborsClassifier(n_neighbors=best_k)
-print("k-fold knn score is", 
-      cross_val_score(knn, X, y, cv=10, scoring='accuracy').mean())
-
-# 3.5. Refit the model
 knn.fit(X_train, y_train)
-print("train-test split knn score is", knn.score(X_test, y_test))
 
-# 3.6. Train the model on all the train data
+# Get new mean accuracy and cross_validation mean accuracy scores.
+print("new mean accuracy score is", knn.score(X_test, y_test))
+print("new cross_validation score is", cross_val_score(knn, X, y, cv=5).mean())
+
+# 3.5. Train the model on all the train data.
 knn.fit(X, y)
 
-# 3.6. Predict for 'test' data
+# 3.6. Predict for 'test' data.
 test['Survived'] = knn.predict(X_predict)
 
-# 3.7. Create csv submission file
+# 3.7. Create csv submission file.
 test[['PassengerId','Survived']].to_csv('submission_knn.csv', index=False)
