@@ -54,8 +54,8 @@ Ticket_unique_values = list(set(Ticket_values))
 
 le = LabelEncoder()
 le.fit(Ticket_unique_values)
-train.Ticket=le.transform(Ticket_values_from_train)
-test.Ticket=le.transform(Ticket_values_from_test)
+train.Ticket = le.transform(Ticket_values_from_train)
+test.Ticket = le.transform(Ticket_values_from_test)
 
 # 1.8. Encode non-numeric 'Last_name' column  to numeric values.
 Last_name_values_from_train = train.Last_name.values.tolist()
@@ -65,8 +65,8 @@ Last_name_unique_values = list(set(Last_name_values))
 
 le2 = LabelEncoder()
 le2.fit(Last_name_unique_values)
-train.Last_name=le2.transform(Last_name_values_from_train)
-test.Last_name=le2.transform(Last_name_values_from_test)
+train.Last_name = le2.transform(Last_name_values_from_train)
+test.Last_name = le2.transform(Last_name_values_from_test)
 
 # 1.9. Create new column 'Relative_fare' from 'Fare' column.
 avg_fare = train.Fare.mean()
