@@ -55,8 +55,8 @@ Ticket_unique_values = list(set(Ticket_values))
 
 le = LabelEncoder()
 le.fit(Ticket_unique_values)
-train.Ticket=le.transform(Ticket_values_from_train)
-test.Ticket=le.transform(Ticket_values_from_test)
+train.Ticket = le.transform(Ticket_values_from_train)
+test.Ticket = le.transform(Ticket_values_from_test)
 
 # 1.8. Encode non-numeric 'Last_name' column  to numeric values.
 Last_name_values_from_train = train.Last_name.values.tolist()
@@ -66,8 +66,8 @@ Last_name_unique_values = list(set(Last_name_values))
 
 le2 = LabelEncoder()
 le2.fit(Last_name_unique_values)
-train.Last_name=le2.transform(Last_name_values_from_train)
-test.Last_name=le2.transform(Last_name_values_from_test)
+train.Last_name = le2.transform(Last_name_values_from_train)
+test.Last_name = le2.transform(Last_name_values_from_test)
 
 # 1.9. Create new column 'Relative_fare' from 'Fare' column.
 avg_fare = train.Fare.mean()
@@ -77,7 +77,7 @@ test['Relative_fare'] = test.Fare.apply(lambda x: round(x/avg_fare, 2))
 # 1.10. Create new column 'Relative_age' from 'Age' column.
 avg_age = train.Age.mean()
 train['Relative_age'] = train.Age.apply(lambda x: round(x/avg_age, 2))
-test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_fare, 2))
+test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_age, 2))
 
 # 1.11. Convert 'Age' and 'Fare' columns to int types.
 train['Age'] = train.Age.astype('int64')
@@ -102,7 +102,7 @@ X_predict = test[select_features]
 # 3.1. Create classifier instance.
 knn = KNeighborsClassifier()
 
-# 3.2. Fit the model.
+# 3.2. Fit the model on training data.
 knn.fit(X_train, y_train)
 
 # 3.3. Get mean accuracy and cross_validation mean accuracy scores.
