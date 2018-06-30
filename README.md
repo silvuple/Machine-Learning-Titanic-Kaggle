@@ -3,9 +3,9 @@
 [link to competition page](https://www.kaggle.com/c/titanic)
 
 basic requirements:
-*python 3
-*pandas
-*sklean
+- python 3
+- pandas
+- sklean
 
 additional libraries/moduls may be required such as:
 *matplotlib
@@ -24,9 +24,9 @@ Different sklearn techniques used thoughout the scripts:
 *cross_val_score (Evaluate classifier score by cross-validation to eliminate overfitting)
 
 Future tasks:
-1.Try DecisionTreeClassifier
-2.Work on Feature engineering
-3.Try data normalization, try OneHotEncoder
-4.Work on feature selection techniques
+1. Try DecisionTreeClassifier
+2. Work on Feature engineering
+3. Try data normalization, try OneHotEncoder
+4. Work on feature selection techniques
 
 Current mean accuracy score ~0.77
