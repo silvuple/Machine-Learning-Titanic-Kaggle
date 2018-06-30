@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import GridSearchCV
 
 
 # Read titanic train and test csv files into pandas DataFrame.
@@ -76,7 +77,7 @@ test['Relative_fare'] = test.Fare.apply(lambda x: round(x/avg_fare, 2))
 # 1.10. Create new column 'Relative_age' from 'Age' column.
 avg_age = train.Age.mean()
 train['Relative_age'] = train.Age.apply(lambda x: round(x/avg_age, 2))
-test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_fare, 2))
+test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_age, 2))
 
 # 1.11. Convert 'Age' and 'Fare' columns to int types.
 train['Age'] = train.Age.astype('int64')
@@ -101,6 +102,7 @@ X_predict = test[select_features]
 ##print(enc.feature_indices_)
 ##X = enc.transform(X).toarray()
 ##X_predict = enc.transform(X_predict).toarray()
+### Code below needs to be adjusted if OneHotEncoding is used.
 
 # Create train/test split.
 X_train, X_test, y_train, y_test = train_test_split(X, y)
@@ -112,13 +114,13 @@ rfc.fit(X_train, y_train)
 
 # Get mean accuracy and cross_validation mean accuracy scores.
 accuracy_score = rfc.score(X_test, y_test)
-cv_score = cross_val_score(rfc, X, y, cv=10, scoring='accuracy').mean()
+cv_score = cross_val_score(rfc, X, y, cv=5).mean()
 print("RFC mean accuracy score is", accuracy_score)
 print("RFC mean cross_val accuracy score is", cv_score)
 
 # Get feature importance (the higher, the more important).
 features_importance = pd.DataFrame({'Feature':X.columns,
-                                    'Importance':rfc.feature_importances_.sort(})
+                                    'Importance':rfc.feature_importances_})
 print("Feature importance:\n", features_importance)
 
 # Search for best parameters with GridSearchCV.
@@ -126,7 +128,7 @@ param_grid = {'max_depth': [80, 110, None],
               'max_features': [2, 'auto', None], 
               'min_samples_leaf': [1, 2, 4], 
               'min_samples_split': [2, 4], 
-              'n_estimators': [10, 200, 1000]}
+              'n_estimators': [100, 200, 1000]}
 grid = GridSearchCV(rfc, param_grid, cv=5)
 grid.fit(X, y)
 print("grid best score is:", grid.best_score_)
