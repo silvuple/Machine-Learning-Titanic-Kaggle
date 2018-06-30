@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
@@ -71,26 +70,19 @@ test.Last_name=le2.transform(Last_name_values_from_test)
 
 # 1.9. Create new column 'Relative_fare' from 'Fare' column.
 avg_fare = train.Fare.mean()
-train['Relative_fare'] = train.Fare.apply(lambda x: x/avg_fare)
-test['Relative_fare'] = test.Fare.apply(lambda x: x/avg_fare)
+train['Relative_fare'] = train.Fare.apply(lambda x: round(x/avg_fare, 2))
+test['Relative_fare'] = test.Fare.apply(lambda x: round(x/avg_fare, 2))
 
 # 1.10. Create new column 'Relative_age' from 'Age' column.
 avg_age = train.Age.mean()
-train['Relative_age'] = train.Age.apply(lambda x: x/avg_fare)
-test['Relative_age'] = test.Age.apply(lambda x: x/avg_fare)
+train['Relative_age'] = train.Age.apply(lambda x: round(x/avg_age, 2))
+test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_fare, 2))
 
 # 1.11. Convert 'Age' and 'Fare' columns to int types.
 train['Age'] = train.Age.astype('int64')
 test['Age'] = test.Age.astype('int64')
 train['Fare'] = train.Fare.astype('int64')
 test['Fare'] = test.Fare.astype('int64')
-
-# 1.12. Round 'Relative_fare' and 'Relative_age' column values to 2 digits 
-# after decimal point.
-train['Relative_fare'] = train.Relative_fare.apply(round, ndigits=2)
-test['Relative_fare'] = test.Relative_fare.apply(round, ndigits=2)
-train['Relative_age'] = train.Relative_age.apply(round, ndigits=2)
-test['Relative_age'] = test.Relative_age.apply(round, ndigits=2)
 
 
 # 2. Select features
@@ -105,18 +97,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y)
 X_predict = test[select_features]
 
 
-# 3. Run classification model - Support Vector Classification
+# 3. Run classification model - Support Vector Classification.
 # 3.1. Create classifier instance and fit the model
 svc = SVC()
 svc.fit(X_train, y_train)
 
-# 3.2. Get mean accuracy and cross_validation mean accuracy scores
+# 3.2. Get mean accuracy and cross_validation mean accuracy scores.
 accuracy_score = svc.score(X_test, y_test)
-print("train_test_split svc score is", accuracy_score)
 mean_cv_score = cross_val_score(svc, X, y, cv=5).mean()
+print("train_test_split svc score is", accuracy_score)
 print("cross_val accuracy svc score is", mean_cv_score)
 
-# 3.3. Search for best C and gamma parameters for scv:
+# 3.3. Search for best C and gamma parameters for scv.
 C_options = [2**x for x in range(-2, 15)]
 gamma_options = [2**x for x in range(-5, 2)]
 param_grid = dict(C=C_options, gamma=gamma_options)
@@ -125,8 +117,8 @@ grid.fit(X, y)
 print("grid best score is", grid.best_score_)
 print("grid best params are", grid.best_params_)
 
-# 3.4. Predict for 'test' data:
+# 3.4. Predict for 'test' data.
 test['Survived'] = grid.predict(X_predict)
 
-# 3.5. Create csv submission file
+# 3.5. Create csv submission file.
 test[['PassengerId','Survived']].to_csv('submission_svc.csv', index=False)
