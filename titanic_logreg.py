@@ -1,9 +1,9 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import GridSearchCV
 from sklearn.feature_selection import RFECV
 
 
@@ -57,8 +57,8 @@ Ticket_unique_values = list(set(Ticket_values))
 
 le = LabelEncoder()
 le.fit(Ticket_unique_values)
-train.Ticket=le.transform(Ticket_values_from_train)
-test.Ticket=le.transform(Ticket_values_from_test)
+train.Ticket = le.transform(Ticket_values_from_train)
+test.Ticket = le.transform(Ticket_values_from_test)
 
 # 1.8. Encode non-numeric 'Last_name' column  to numeric values.
 Last_name_values_from_train = train.Last_name.values.tolist()
@@ -68,8 +68,8 @@ Last_name_unique_values = list(set(Last_name_values))
 
 le2 = LabelEncoder()
 le2.fit(Last_name_unique_values)
-train.Last_name=le2.transform(Last_name_values_from_train)
-test.Last_name=le2.transform(Last_name_values_from_test)
+train.Last_name = le2.transform(Last_name_values_from_train)
+test.Last_name = le2.transform(Last_name_values_from_test)
 
 # 1.9. Create new column 'Relative_fare' from 'Fare' column.
 avg_fare = train.Fare.mean()
@@ -78,7 +78,7 @@ test['Relative_fare'] = test.Fare.apply(lambda x: round(x/avg_fare, 2))
 
 # 1.10. Create new column 'Relative_age' from 'Age' column.
 avg_age = train.Age.mean()
-train['Relative_age'] = train.Age.apply(lambda x: round(x/avg_fare, 2))
+train['Relative_age'] = train.Age.apply(lambda x: round(x/avg_age, 2))
 test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_age, 2))
 
 # 1.11. Convert 'Age' and 'Fare' columns to int types.
@@ -121,8 +121,19 @@ plt.ylabel("Cross validation score (nb of correct classifications)")
 plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
 plt.show()
 
+# Reduce X and X_predict sets to the selected features. 
+X_new = rfecv.transform(X)
+X_predict_new = rfecv.transform(X_predict)
+
+# Search for best parameters with GridSearchCV.
+param_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]}
+grid = GridSearchCV(logreg, param_grid, cv=5)
+grid.fit(X_new, y)
+print("grid best score is:", grid.best_score_)
+print("grid best params are:", grid.best_params_)
+
 # Predict for 'test' data
-test['Survived'] = rfecv.predict(X_predict)
+test['Survived'] = grid.predict(X_predict_new)
 
 # Create csv submission file
 test[['PassengerId','Survived']].to_csv('submission_lgrg.csv', index=False)
