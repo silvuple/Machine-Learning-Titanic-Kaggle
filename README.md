@@ -5,23 +5,23 @@
 basic requirements:
 - python 3
 - pandas
-- sklean
+- sklearn
 
 additional libraries/moduls may be required such as:
-*matplotlib
-*numpy
+* matplotlib
+* numpy
 
 Each script file utilizes on of the SciKit Learn (sklearn) classiriers: 
-* RandomForestClassifier
-* LogisticRegression
-* KNeighborsClassifier
-* SVC (Support Vector Classification)
+1. RandomForestClassifier
+2. LogisticRegression
+3. KNeighborsClassifier
+4. SVC (Support Vector Classification)
 
 Different sklearn techniques used thoughout the scripts:
-*RFE/RFECV (Feature ranking with recursive feature elimination and cross-validated selection of the best number of features)
-*GridSearchCV (Exhaustive search over specified parameter values for an estimator)
-*LabelEncoder (Encode labels with value, transform non-numerical labels to numerical labels)
-*cross_val_score (Evaluate classifier score by cross-validation to eliminate overfitting)
+* RFE/RFECV (Feature ranking with recursive feature elimination and cross-validated selection of the best number of features)
+* GridSearchCV (Exhaustive search over specified parameter values for an estimator)
+* LabelEncoder (Encode labels with value, transform non-numerical labels to numerical labels)
+* cross_val_score (Evaluate classifier score by cross-validation to eliminate overfitting)
 
 Future tasks:
 1. Try DecisionTreeClassifier
