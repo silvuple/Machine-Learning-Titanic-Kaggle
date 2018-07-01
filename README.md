@@ -16,6 +16,7 @@ Each script file utilizes on of the SciKit Learn (sklearn) classiriers:
 2. LogisticRegression
 3. KNeighborsClassifier
 4. SVC (Support Vector Classification)
+5. DecisionTreeClassifier
 
 Different sklearn techniques used thoughout the scripts:
 * RFE/RFECV (Feature ranking with recursive feature elimination and cross-validated selection of the best number of features)
