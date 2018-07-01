@@ -24,9 +24,8 @@ Different sklearn techniques used thoughout the scripts:
 * cross_val_score (Evaluate classifier score by cross-validation to eliminate overfitting)
 
 Future tasks:
-1. Try DecisionTreeClassifier
-2. Work on Feature engineering
-3. Try data normalization, try OneHotEncoder
-4. Work on feature selection techniques
+* Work on Feature engineering
+* Try data normalization, try OneHotEncoder
+* Work on feature selection techniques
 
 Current mean accuracy score ~0.77
