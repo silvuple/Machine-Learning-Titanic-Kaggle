@@ -18,7 +18,7 @@ Each script file utilizes on of the SciKit Learn (sklearn) classiriers:
 4. SVC (Support Vector Classification)
 5. DecisionTreeClassifier
 
-Different sklearn techniques used thoughout the scripts:
+Different sklearn techniques used throughout the scripts:
 * RFE/RFECV (Feature ranking with recursive feature elimination and cross-validated selection of the best number of features)
 * GridSearchCV (Exhaustive search over specified parameter values for an estimator)
 * LabelEncoder (Encode labels with value, transform non-numerical labels to numerical labels)
