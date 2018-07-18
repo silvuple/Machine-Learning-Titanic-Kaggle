@@ -91,9 +91,9 @@ all_features = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket',
                 'Fare', 'Embarked', 'Last_name', 'Age_group', 
                 'Relative_fare', 'Relative_age']
 select_features = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch']
-X = train[select_features]
+X = train.loc[:, select_features]
 y = train['Survived']
-X_predict = test[select_features]
+X_predict = test.loc[:, select_features]
 
 ### Create dummy variables for the feature columns using One-Hot Encoder.
 ##enc = OneHotEncoder(handle_unknown='ignore')
