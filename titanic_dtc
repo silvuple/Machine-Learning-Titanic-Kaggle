@@ -90,9 +90,9 @@ all_features = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket',
                 'Fare', 'Embarked', 'Last_name', 'Age_group', 
                 'Relative_fare', 'Relative_age']
 select_features = ['Pclass', 'Sex', 'Age', 'SibSp', 'Ticket', 'Last_name']
-X = train[select_features]
+X = train.loc[:, select_features]
 y = train['Survived']
-X_predict = test[select_features]
+X_predict = test.loc[:, select_features]
 
 # Create train/test split.
 X_train, X_test, y_train, y_test = train_test_split(X, y)
