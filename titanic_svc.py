@@ -121,4 +121,4 @@ print("grid best params are", grid.best_params_)
 test['Survived'] = grid.predict(X_predict)
 
 # 3.5. Create csv submission file.
-test[['PassengerId','Survived']].to_csv('submission_svc.csv', index=False)
+test.loc[:, ['PassengerId','Survived']].to_csv('submission_svc.csv', index=False)
