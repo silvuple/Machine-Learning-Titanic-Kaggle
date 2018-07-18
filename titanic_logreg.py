@@ -93,10 +93,10 @@ test['Fare'] = test.Fare.astype('int64')
 all_features = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 
                 'Embarked', 'Last_name', 'Age_group', 
                 'Relative_fare', 'Relative_age']
-X = train[all_features]
+X = train.loc[:, all_features]
 y = train['Survived']
 X_train, X_test, y_train, y_test = train_test_split(X, y)
-X_predict = test[all_features]
+X_predict = test.loc[:, all_features]
 
 # Feature selection/elimination with RFECV
 logreg = LogisticRegression()
