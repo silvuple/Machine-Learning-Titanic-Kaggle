@@ -142,4 +142,4 @@ knn.fit(X, y)
 test['Survived'] = knn.predict(X_predict)
 
 # 3.7. Create csv submission file.
-test[['PassengerId','Survived']].to_csv('submission_knn.csv', index=False)
+test.loc[:, ['PassengerId','Survived']].to_csv('submission_knn.csv', index=False)
