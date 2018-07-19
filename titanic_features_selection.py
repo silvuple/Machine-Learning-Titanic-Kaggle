@@ -75,10 +75,8 @@ train['Relative_age'] = train.Age.apply(lambda x: round(x/avg_age, 2))
 test['Relative_age'] = test.Age.apply(lambda x: round(x/avg_age, 2))
 
 # Convert 'Age' and 'Fare' columns to int types.
-train['Age'] = train.Age.astype('int64')
-test['Age'] = test.Age.astype('int64')
-train['Fare'] = train.Fare.astype('int64')
-test['Fare'] = test.Fare.astype('int64')
+train = train.astype({'Age': 'int', 'Fare': 'int'})
+test = test.astype({'Age': 'int', 'Fare': 'int'})
 
 # Pickle both DataFrames.
 train.to_pickle('train.pkl')
